@@ -1,12 +1,42 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.item {
+  display: flex;
+}
+
 .card {
   display: flex;
   flex-direction: column;
+  width: 100%;
   text-align: left;
   border: 1px solid #e5e4e7;
   border-radius: 8px;
   overflow: hidden;
   background: #fff;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  transition:
+    box-shadow 0.2s,
+    transform 0.2s;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+  }
+  &:focus-visible {
+    outline: 2px solid #0a66c2;
+    outline-offset: 2px;
+  }
 }
 
 .poster {
@@ -50,15 +80,4 @@
   margin: 0;
   font-size: 14px;
   color: #6b6375;
-}
-
-.overview {
-  margin: 4px 0 0;
-  font-size: 14px;
-  line-height: 145%;
-  color: #6b6375;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
 }

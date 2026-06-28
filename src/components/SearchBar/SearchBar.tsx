@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import type { FormEvent, ChangeEvent } from 'react';
-import css from './SearchForm.module.css';
+import css from './SearchBar.module.css';
 
-interface SearchFormProps {
+interface SearchBarProps {
   onSubmit: (query: string) => void;
 }
 
-function SearchForm({ onSubmit }: SearchFormProps) {
+function SearchBar({ onSubmit }: SearchBarProps) {
   const [value, setValue] = useState('');
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -42,4 +42,4 @@ function SearchForm({ onSubmit }: SearchFormProps) {
   );
 }
 
-export default SearchForm;
+export default SearchBar;

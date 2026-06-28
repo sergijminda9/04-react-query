@@ -3,8 +3,11 @@ import type { ComponentType } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import ReactPaginateModule from 'react-paginate';
 import type { ReactPaginateProps } from 'react-paginate';
-import SearchForm from '../SearchForm/SearchForm';
-import MovieList from '../MovieList/MovieList';
+import SearchBar from '../SearchBar/SearchBar';
+import MovieGrid from '../MovieGrid/MovieGrid';
+import MovieModal from '../MovieModal/MovieModal';
+import Loader from '../Loader/Loader';
+import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import { fetchMovies } from '../../services/movies';
 import css from './App.module.css';
 
@@ -19,6 +22,7 @@ const ReactPaginate = (
 function App() {
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
+  const [selectedMovieId, setSelectedMovieId] = useState<number | null>(null);
 
   const { data, isPending, isError, isSuccess } = useQuery({
     queryKey: ['movies', query, page],
@@ -31,25 +35,33 @@ function App() {
     setPage(1);
   };
 
+  const handleSelectMovie = (movieId: number): void => {
+    setSelectedMovieId(movieId);
+  };
+
+  const handleCloseModal = (): void => {
+    setSelectedMovieId(null);
+  };
+
   const movies = data?.results ?? [];
   const totalPages = data?.total_pages ?? 0;
 
   return (
     <div className={css.container}>
       <h1 className={css.title}>Movie search</h1>
-      <SearchForm onSubmit={handleSearch} />
+      <SearchBar onSubmit={handleSearch} />
 
-      {isPending && query !== '' && <p className={css.message}>Loading...</p>}
+      {isPending && query !== '' && <Loader />}
       {isError && (
-        <p className={css.message}>
-          Something went wrong while fetching movies. Please try again.
-        </p>
+        <ErrorMessage message="Something went wrong while fetching movies. Please try again." />
       )}
       {isSuccess && movies.length === 0 && (
-        <p className={css.message}>No movies found for your request.</p>
+        <ErrorMessage message="No movies found for your request." />
       )}
 
-      {movies.length > 0 && <MovieList movies={movies} />}
+      {movies.length > 0 && (
+        <MovieGrid movies={movies} onSelect={handleSelectMovie} />
+      )}
 
       {totalPages > 1 && (
         <ReactPaginate
@@ -63,6 +75,10 @@ function App() {
           nextLabel="→"
           previousLabel="←"
         />
+      )}
+
+      {selectedMovieId !== null && (
+        <MovieModal movieId={selectedMovieId} onClose={handleCloseModal} />
       )}
     </div>
   );
