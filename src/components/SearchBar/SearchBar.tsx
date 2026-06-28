@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import type { FormEvent, ChangeEvent } from 'react';
+import toast from 'react-hot-toast';
 import css from './SearchBar.module.css';
 
 interface SearchBarProps {
@@ -7,33 +6,25 @@ interface SearchBarProps {
 }
 
 function SearchBar({ onSubmit }: SearchBarProps) {
-  const [value, setValue] = useState('');
+  const handleAction = (formData: FormData): void => {
+    const query = (formData.get('query') as string).trim();
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setValue(event.target.value);
-  };
-
-  const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
-    event.preventDefault();
-
-    const trimmedValue = value.trim();
-    if (!trimmedValue) {
+    if (!query) {
+      toast.error('Please enter your search query.');
       return;
     }
 
-    onSubmit(trimmedValue);
+    onSubmit(query);
   };
 
   return (
-    <form className={css.form} onSubmit={handleSubmit}>
+    <form className={css.form} action={handleAction}>
       <input
         className={css.input}
         type="text"
         name="query"
         autoComplete="off"
         placeholder="Search movies"
-        value={value}
-        onChange={handleChange}
       />
       <button className={css.button} type="submit">
         Search

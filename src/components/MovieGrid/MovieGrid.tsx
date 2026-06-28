@@ -3,7 +3,7 @@ import css from './MovieGrid.module.css';
 
 interface MovieGridProps {
   movies: Movie[];
-  onSelect: (movieId: number) => void;
+  onSelect: (movie: Movie) => void;
 }
 
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w342';
@@ -12,7 +12,8 @@ const NO_POSTER_LABEL = 'No poster';
 function MovieGrid({ movies, onSelect }: MovieGridProps) {
   return (
     <ul className={css.grid}>
-      {movies.map(({ id, title, poster_path, release_date, vote_average }) => {
+      {movies.map((movie) => {
+        const { id, title, poster_path, release_date, vote_average } = movie;
         const releaseYear = release_date ? release_date.slice(0, 4) : 'N/A';
 
         return (
@@ -20,7 +21,7 @@ function MovieGrid({ movies, onSelect }: MovieGridProps) {
             <button
               type="button"
               className={css.card}
-              onClick={() => onSelect(id)}
+              onClick={() => onSelect(movie)}
             >
               {poster_path ? (
                 <img

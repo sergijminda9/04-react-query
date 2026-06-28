@@ -1,25 +1,19 @@
-import { useEffect } from 'react';
 import type { MouseEvent, KeyboardEvent } from 'react';
+import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { useQuery } from '@tanstack/react-query';
-import { fetchMovieDetails } from '../../services/movieService';
-import Loader from '../Loader/Loader';
-import ErrorMessage from '../ErrorMessage/ErrorMessage';
+import type { Movie } from '../../types/movie';
 import css from './MovieModal.module.css';
 
 interface MovieModalProps {
-  movieId: number;
+  movie: Movie;
   onClose: () => void;
 }
 
-const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
-const NO_POSTER_LABEL = 'No poster';
+const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w780';
+const NO_BACKDROP_LABEL = 'No image';
 
-function MovieModal({ movieId, onClose }: MovieModalProps) {
-  const { data, isPending, isError } = useQuery({
-    queryKey: ['movie-details', movieId],
-    queryFn: () => fetchMovieDetails(movieId),
-  });
+function MovieModal({ movie, onClose }: MovieModalProps) {
+  const { title, overview, backdrop_path, release_date, vote_average } = movie;
 
   useEffect(() => {
     const handleKeyDown = (event: globalThis.KeyboardEvent): void => {
@@ -69,52 +63,28 @@ function MovieModal({ movieId, onClose }: MovieModalProps) {
           ✕
         </button>
 
-        {isPending && <Loader />}
-        {isError && <ErrorMessage message="Failed to load movie details." />}
-
-        {data && (
-          <div className={css.content}>
-            {data.poster_path ? (
-              <img
-                className={css.poster}
-                src={`${IMAGE_BASE_URL}${data.poster_path}`}
-                alt={data.title}
-              />
-            ) : (
-              <div className={css.noPoster}>{NO_POSTER_LABEL}</div>
-            )}
-            <div className={css.details}>
-              <h2 className={css.title}>{data.title}</h2>
-              {data.tagline && <p className={css.tagline}>{data.tagline}</p>}
-              <p className={css.overview}>{data.overview}</p>
-              <ul className={css.meta}>
-                <li>
-                  <strong>Release date:</strong> {data.release_date || 'N/A'}
-                </li>
-                <li>
-                  <strong>Rating:</strong> {data.vote_average.toFixed(1)} / 10
-                </li>
-                <li>
-                  <strong>Runtime:</strong>{' '}
-                  {data.runtime ? `${data.runtime} min` : 'N/A'}
-                </li>
-                <li>
-                  <strong>Genres:</strong>{' '}
-                  {data.genres.length > 0
-                    ? data.genres.map((genre) => genre.name).join(', ')
-                    : 'N/A'}
-                </li>
-                <li>
-                  <strong>Budget:</strong>{' '}
-                  {data.budget ? `$${data.budget.toLocaleString()}` : 'N/A'}
-                </li>
-                <li>
-                  <strong>Status:</strong> {data.status}
-                </li>
-              </ul>
-            </div>
-          </div>
+        {backdrop_path ? (
+          <img
+            className={css.backdropImage}
+            src={`${IMAGE_BASE_URL}${backdrop_path}`}
+            alt={title}
+          />
+        ) : (
+          <div className={css.noBackdrop}>{NO_BACKDROP_LABEL}</div>
         )}
+
+        <div className={css.content}>
+          <h2 className={css.title}>{title}</h2>
+          <p className={css.overview}>{overview}</p>
+          <ul className={css.meta}>
+            <li>
+              <strong>Release date:</strong> {release_date || 'N/A'}
+            </li>
+            <li>
+              <strong>Rating:</strong> {vote_average.toFixed(1)} / 10
+            </li>
+          </ul>
+        </div>
       </div>
     </div>,
     document.body,
