@@ -1,0 +1,64 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  border: 1px solid #e5e4e7;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.poster {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  display: block;
+}
+
+.noPoster {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f4f3ec;
+  color: #6b6375;
+  font-size: 14px;
+}
+
+.info {
+  padding: 12px 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.title {
+  margin: 0;
+  font-size: 17px;
+  line-height: 124%;
+  color: #08060d;
+}
+
+.year {
+  font-weight: 400;
+  color: #6b6375;
+}
+
+.rating {
+  margin: 0;
+  font-size: 14px;
+  color: #6b6375;
+}
+
+.overview {
+  margin: 4px 0 0;
+  font-size: 14px;
+  line-height: 145%;
+  color: #6b6375;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
