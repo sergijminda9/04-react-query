@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import type { MouseEvent, KeyboardEvent } from 'react';
 import { createPortal } from 'react-dom';
 import { useQuery } from '@tanstack/react-query';
-import { fetchMovieDetails } from '../../services/movies';
+import { fetchMovieDetails } from '../../services/movieService';
 import Loader from '../Loader/Loader';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import css from './MovieModal.module.css';
